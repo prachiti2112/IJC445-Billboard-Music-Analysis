@@ -31,6 +31,14 @@ train <- data_clean[train_index, ]
 test <- data_clean[-train_index, ]
 
 #Figure 1- Average of danceability over time 
+#Creating a png for figure 1
+png(
+  filename="Figure1_average_danceability.png",
+  width= 1200,
+  height= 800,
+  res= 150
+)
+
 ggplot(data_clean,aes(x=year,y=danceability))+
   stat_summary(fun = mean, geom = "line", linewidth = 1)+
   stat_summary(fun = mean, geom = "point")+
@@ -40,8 +48,17 @@ ggplot(data_clean,aes(x=year,y=danceability))+
     y="Average Dancebility"
   )+
   theme_minimal()
+dev.off()
 #Figure 2- multiple musical features over the time 
 #Converting data to long format to get multiple feature comparison 
+
+png(
+  filename="Figure2_musical_features_overtime.png",
+  width= 1200,
+  height= 800,
+  res= 150
+)
+
 data_long<- data_clean %>%
   select(year,danceability,energy,loudness,acousticness) %>%
   pivot_longer(
@@ -58,8 +75,18 @@ ggplot(data_long,aes(x=year,y=value,color=feature))+
     color="Feature"
   )+
   theme_minimal()
+
+dev.off()
 #Figure 3- Musical features vs chart rank
 #Preparing the data for feature vs rank comparison
+
+png(
+  filename="Figure3_musical_features_VS_ Chart_rank.png",
+  width= 1200,
+  height= 800,
+  res= 150
+)
+
 feature_rank<-data_clean %>%
   select(
     ranking,
@@ -85,8 +112,18 @@ ggplot(feature_rank,aes(x=value,y=ranking))+
     y="chart rank(lower = higher popularity)"
   )+
   theme_minimal()
+
+dev.off()
 #Figure 4-prediction with linear regression and random forest model 
 # Linear regression model
+
+png(
+  filename="Figure4_linearregression_randomforest.png",
+  width= 1200,
+  height= 800,
+  res= 150
+)
+
 lm_model <- lm(
   ranking ~ danceability + energy + loudness + tempo + valence,
   data = train
@@ -94,7 +131,7 @@ lm_model <- lm(
 
 # Random Forest model
 rf_model <- randomForest(
-  ranking ~ danceabAility + energy + loudness + tempo + valence,
+  ranking ~ danceability + energy + loudness + tempo + valence,
   data = train
 )
 
@@ -125,3 +162,5 @@ ggplot(model_results, aes(x = Actual, y = Predicted)) +
     y = "Predicted Chart Rank"
   ) +
   theme_minimal()
+
+dev.off()
